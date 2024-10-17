@@ -35,6 +35,7 @@ let validationSchema = toTypedSchema(
 
 function previewAvatarFile(event) {
   const file = event.target.files[0];
+  avatarFile.value = file;
   const reader = new FileReader();
   reader.onload = (evt) => {
     avatarFile.value = evt.target.result;

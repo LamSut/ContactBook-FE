@@ -30,8 +30,7 @@ async function getContact(id) {
 
 async function onUpdateContact(contact) {
     try {
-        console.log(contact);
-        await contactsService.updateContact(contact.get('id'), contact);
+        await contactsService.updateContact(props.contactId, contact);
         message.value = 'Liên hệ được cập nhật thành công.';
     } catch (error) {
         console.log(error);
