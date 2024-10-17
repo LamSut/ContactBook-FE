@@ -3,12 +3,16 @@ import { ref, useTemplateRef } from 'vue';
 import { Form, Field, ErrorMessage } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/zod';
 import { z } from 'zod';
+
 const props = defineProps({
   contact: { type: Object, required: true },
 });
+
 let avatarFileInput = useTemplateRef('avatar-file-input');
 let avatarFile = ref(props.contact.avatar);
+
 const $emit = defineEmits(['submit:contact', 'delete:contact']);
+
 let validationSchema = toTypedSchema(
   z.object({
     name: z.string()
@@ -28,6 +32,7 @@ let validationSchema = toTypedSchema(
     avatarFile: z.instanceof(File).optional(),
   })
 );
+
 function previewAvatarFile(event) {
   const file = event.target.files[0];
   const reader = new FileReader();
@@ -36,6 +41,7 @@ function previewAvatarFile(event) {
   };
   reader.readAsDataURL(file);
 }
+
 function submitContact(values) {
   let formData = new FormData();
   for (let key in values) {
@@ -45,6 +51,7 @@ function submitContact(values) {
   }
   $emit('submit:contact', formData);
 }
+
 function deleteContact() {
   $emit('delete:contact', props.contact.id);
 }

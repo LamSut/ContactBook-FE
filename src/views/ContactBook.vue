@@ -97,37 +97,22 @@ watch(currentPage, () => retrieveContacts(currentPage.value), { immediate: true 
       <div class="my-3">
         <InputSearch v-model="searchText" />
       </div>
-      <ContactList
-        v-if="filteredContacts.length > 0"
-        :contacts="filteredContacts"
-        v-model:selected-index="selectedIndex"
-      />
+      <ContactList v-if="filteredContacts.length > 0" :contacts="filteredContacts"
+        v-model:selected-index="selectedIndex" />
       <p v-else>
         Không có liên hệ nào.
       </p>
       <div class="mt-3 d-flex flex-wrap justify-content-round align-items-center">
-        <MainPagination
-          :total-pages="totalPages"
-          :current-page="currentPage"
-          @update:current-page="changeCurrentPage"
-        />
+        <MainPagination :total-pages="totalPages" :current-page="currentPage"
+          @update:current-page="changeCurrentPage" />
         <div class="w-100"></div>
-        <button
-          class="btn btn-sm btn-primary"
-          @click="retrieveContacts(currentPage)"
-        >
+        <button class="btn btn-sm btn-primary" @click="retrieveContacts(currentPage)">
           <i class="fas fa-redo"></i> Làm mới
         </button>
-        <button
-          class="btn btn-sm btn-success"
-          @click="goToAddContact"
-        >
+        <button class="btn btn-sm btn-success" @click="goToAddContact">
           <i class="fas fa-plus"></i> Thêm mới
         </button>
-        <button
-          class="btn btn-sm btn-danger"
-          @click="onDeleteContacts"
-        >
+        <button class="btn btn-sm btn-danger" @click="onDeleteContacts">
           <i class="fas fa-trash"></i> Xóa tất cả
         </button>
       </div>
@@ -139,6 +124,13 @@ watch(currentPage, () => retrieveContacts(currentPage.value), { immediate: true 
           <i class="fas fa-address-card"></i>
         </h4>
         <ContactCard :contact="selectedContact" />
+        <router-link :to="{
+          name: 'contact.edit',
+          params: { id: selectedContact.id },
+        }">
+          <span class="mt-2 badge text-bg-warning">
+            <i class="fas fa-edit"></i> Hiệu chỉnh</span>
+        </router-link>
       </div>
     </div>
   </div>
