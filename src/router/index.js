@@ -12,7 +12,7 @@ const routes = [
         component: () => import('@/views/NotFound.vue'),
     },
     {
-        path: '/contacts',
+        path: '/',
         name: 'contact.add',
         component: () => import('@/views/ContactAdd.vue'),
     },

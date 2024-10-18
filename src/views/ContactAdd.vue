@@ -3,58 +3,36 @@ import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import ContactForm from '@/components/ContactForm.vue';
 import contactsService from '@/services/contacts.service';
-
-const props = defineProps({
-    contactId: { type: String, required: true },
-});
+import { DEFAULT_AVATAR } from '@/constants';
 
 const router = useRouter();
 const route = useRoute();
 
-const contact = ref(null);
+const contact = ref({
+    name: '',
+    email: '',
+    address: '',
+    phone: '',
+    favorite: false,
+    avatar: DEFAULT_AVATAR,
+});
 const message = ref('');
 
-async function getContact(id) {
+async function onCreateContact(contact) {
     try {
-        contact.value = await contactsService.fetchContact(id);
-    } catch (error) {
-        console.log(error);
-        router.push({
-            name: 'notfound',
-            params: { pathMatch: route.path.split('/').slice(1) },
-            query: route.query,
-            hash: route.hash,
-        });
-    }
-}
-
-async function onUpdateContact(contact) {
-    try {
-        await contactsService.updateContact(props.contactId, contact);
-        message.value = 'Liên hệ được cập nhật thành công.';
+        await contactsService.createContact(contact);
+        message.value = 'Liên hệ được tạo thành công.';
     } catch (error) {
         console.log(error);
     }
 }
 
-async function onDeleteContact(id) {
-    if (confirm('Bạn muốn xóa Liên hệ này?')) {
-        try {
-            await contactsService.deleteContact(id);
-            router.push({ name: 'contactbook' });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-}
-
-getContact(props.contactId);
 </script>
 
 <template>
     <div v-if="contact" class="page">
-        <h4>Hiệu chỉnh Liên hệ</h4>
-        <ContactForm :contact="contact" @submit:contact="onUpdateContact" @delete:contact="onDeleteContact" />
+        <h4>Thêm mới Liên hệ</h4>
+        <ContactForm :contact="contact" @submit:contact="onCreateContact" />
         <p>{{ message }}</p>
     </div>
 </template>
