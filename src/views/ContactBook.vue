@@ -5,12 +5,11 @@ import ContactCard from '@/components/ContactCard.vue';
 import InputSearch from '@/components/InputSearch.vue';
 import ContactList from '@/components/ContactList.vue';
 import MainPagination from '@/components/MainPagination.vue';
-import contactsService from '@/services/contacts.service';
+import useContacts from '@/composables/useContacts'
 
 const router = useRouter();
 const route = useRoute();
 
-const totalPages = ref(1);
 // current page is from the query string (?page=1)
 const currentPage = computed(() => {
   const page = Number(route.query?.page);
@@ -18,9 +17,11 @@ const currentPage = computed(() => {
   return page;
 });
 
-const contacts = ref([]);
 const selectedIndex = ref(-1);
 const searchText = ref('');
+
+const { fetchContacts, deleteAllContacts } = useContacts();
+const { totalPages, contacts } = fetchContacts(currentPage);
 
 // Map each contact to a string for searching
 const searchableContacts = computed(() =>
@@ -43,27 +44,12 @@ const selectedContact = computed(() => {
   return filteredContacts.value[selectedIndex.value];
 });
 
-// Get contacts for a specific page and order them by name
-async function retrieveContacts(page) {
-  try {
-    const chunk = await contactsService.fetchContacts(page);
-    totalPages.value = chunk.metadata.lastPage ?? 1;
-    contacts.value = chunk.contacts.sort(
-      (current, next) => current.name.localeCompare(next.name)
-    );
-    selectedIndex.value = -1;
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 // Handle delete all contacts event
 async function onDeleteContacts() {
   if (confirm('Bạn muốn xóa tất cả Liên hệ?')) {
     try {
-      await contactsService.deleteAllContacts();
-      totalPages.value = 1;
-      contacts.value = [];
+      await deleteAllContacts();
       selectedIndex.value = -1;
       changeCurrentPage(1);
     } catch (error) {
@@ -83,8 +69,6 @@ function changeCurrentPage(page) {
 // Whenever searchText changes, reset selectedIndex
 watch(searchText, () => (selectedIndex.value = -1));
 
-// When currentPage changes, fetch contacts for currentPage
-watch(currentPage, () => retrieveContacts(currentPage.value), { immediate: true });
 </script>
 
 <template>

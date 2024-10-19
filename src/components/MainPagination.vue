@@ -46,43 +46,20 @@ const pages = computed(() => {
 <template>
   <nav>
     <ul class="pagination">
-      <li
-        class="page-item"
-        :class="{ disabled: currentPage === 1 }"
-      >
-        <a
-          role="button"
-          class="page-link"
-          @click.prevent="$emit('update:currentPage', currentPage - 1)"
-        >
+      <li class="page-item" :class="{ disabled: currentPage === 1 }">
+        <a role="button" class="page-link" @click.prevent="$emit('update:currentPage', currentPage - 1)">
           « Previous
         </a>
       </li>
 
-      <li
-        v-for="page in pages"
-        :key="page"
-        class="page-item"
-        :class="{ active: page === currentPage }"
-      >
-        <a
-          role="button"
-          class="page-link"
-          @click.prevent="$emit('update:currentPage', page)"
-        >
+      <li v-for="page in pages" :key="page" class="page-item" :class="{ active: page === currentPage }">
+        <a role="button" class="page-link" @click.prevent="$emit('update:currentPage', page)">
           {{ page }}
         </a>
       </li>
 
-      <li
-        class="page-item"
-        :class="{ disabled: currentPage === totalPages }"
-      >
-        <a
-          role="button"
-          class="page-link"
-          @click.prevent="$emit('update:currentPage', currentPage + 1)"
-        >
+      <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+        <a role="button" class="page-link" @click.prevent="$emit('update:currentPage', currentPage + 1)">
           Next »
         </a>
       </li>

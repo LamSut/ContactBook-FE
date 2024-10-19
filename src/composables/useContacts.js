@@ -6,7 +6,7 @@ export default function useContacts() {
     function fetchContacts(page) {
         const { data: contactsPage, ...rest } = useQuery({
             queryKey: ["contacts", page],
-            queryFn: () => contactsService.getContacts(page)
+            queryFn: () => contactsService.fetchContacts(page)
         });
         const totalPages = computed(() => (contactsPage.value?.metadata.lastPage ?? 1));
         const contacts = computed(() => (contactsPage.value?.contacts ?? []));
@@ -17,7 +17,7 @@ export default function useContacts() {
     function fetchContact(id) {
         const { data: contact } = useQuery({
             queryKey: ["contacts", id],
-            queryFn: () => contactsService.getContact(id)
+            queryFn: () => contactsService.fetchContact(id)
         });
         return contact;
     }
