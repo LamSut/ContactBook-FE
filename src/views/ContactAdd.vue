@@ -17,7 +17,7 @@ const message = ref('');
 const { createContact } = useContacts();
 async function onCreateContact(contact) {
     try {
-        await createContact(contact);
+        createContact(contact);
         message.value = 'Liên hệ được tạo thành công.';
     } catch (error) {
         console.log(error);

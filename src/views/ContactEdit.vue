@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import ContactForm from '@/components/ContactForm.vue';
-import contactsService from '@/services/contacts.service';
+import useContacts from '@/composables/useContacts';
 
 const props = defineProps({
     contactId: { type: String, required: true },
@@ -11,26 +11,29 @@ const props = defineProps({
 const router = useRouter();
 const route = useRoute();
 
-const contact = ref(null);
+const { fetchContact, updateContact, deleteContact } = useContacts();
+
+const contact = fetchContact(props.contactId);
 const message = ref('');
 
-async function getContact(id) {
-    try {
-        contact.value = await contactsService.fetchContact(id);
-    } catch (error) {
-        console.log(error);
-        router.push({
-            name: 'notfound',
-            params: { pathMatch: route.path.split('/').slice(1) },
-            query: route.query,
-            hash: route.hash,
-        });
-    }
-}
+// async function getContact(id) {
+//     try {
+//         contact.value = await contactsService.fetchContact(id);
+//     } catch (error) {
+//         console.log(error);
+//         router.push({
+//             name: 'notfound',
+//             params: { pathMatch: route.path.split('/').slice(1) },
+//             query: route.query,
+//             hash: route.hash,
+//         });
+//     }
+// }
 
 async function onUpdateContact(contact) {
     try {
-        await contactsService.updateContact(props.contactId, contact);
+        //bug 400, no handle 404 yet
+        updateContact(props.contactId, contact);
         message.value = 'Liên hệ được cập nhật thành công.';
     } catch (error) {
         console.log(error);
@@ -40,7 +43,8 @@ async function onUpdateContact(contact) {
 async function onDeleteContact(id) {
     if (confirm('Bạn muốn xóa Liên hệ này?')) {
         try {
-            await contactsService.deleteContact(id);
+            //con bug khi quay ve list
+            deleteContact(id);
             router.push({ name: 'contactbook' });
         } catch (error) {
             console.log(error);
@@ -48,7 +52,7 @@ async function onDeleteContact(id) {
     }
 }
 
-getContact(props.contactId);
+fetchContact(props.contactId);
 </script>
 
 <template>
