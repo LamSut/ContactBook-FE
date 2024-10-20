@@ -1,8 +1,12 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import ContactForm from '@/components/ContactForm.vue';
 import useContacts from '@/composables/useContacts';
 import { DEFAULT_AVATAR } from '@/constants';
+
+const router = useRouter();
+const route = useRoute();
 
 const contact = ref({
     name: '',
@@ -18,7 +22,8 @@ const { createContact } = useContacts();
 async function onCreateContact(contact) {
     try {
         createContact(contact);
-        message.value = 'Liên hệ được tạo thành công.';
+        alert('Liên hệ được tạo thành công.');
+        router.push({ name: 'contactbook' });
     } catch (error) {
         console.log(error);
     }
