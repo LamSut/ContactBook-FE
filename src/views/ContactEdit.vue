@@ -53,8 +53,6 @@ async function onDeleteContact(id) {
         }
     }
 }
-
-fetchContact(props.contactId);
 </script>
 
 <template>
