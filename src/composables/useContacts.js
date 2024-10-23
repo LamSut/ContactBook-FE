@@ -26,7 +26,15 @@ export default function useContacts() {
 
     const createContactMutation = useMutation({
         mutationFn: contactsService.createContact,
-        onSuccess: (data) => queryClient.setQueriesData(["contact", "create"], data),
+        onSuccess: (data) => {
+            queryClient.setQueryData(["contacts", currentPage], (oldData) => {
+                if (!oldData) return data;
+                return {
+                    ...oldData,
+                    contacts: [...oldData.contacts, data],
+                };
+            });
+        },
         onError: (error) => {
             console.error('Error updating contact:', error);
         },
@@ -42,7 +50,15 @@ export default function useContacts() {
 
     const deleteContactMutation = useMutation({
         mutationFn: contactsService.deleteContact,
-        onSuccess: (data) => queryClient.setQueriesData(["contact", "delete"], data),
+        onSuccess: (data) => {
+            queryClient.setQueryData(["contacts", currentPage], (oldData) => {
+                if (!oldData) return data;
+                return {
+                    ...oldData,
+                    contacts: [...oldData.contacts, data],
+                };
+            });
+        },
         onError: (error) => {
             console.error('Error updating contact:', error);
         },
