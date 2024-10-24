@@ -3,7 +3,10 @@ localhost {
 	file_server
 
 	handle /api/* {
-		uri strip_prefix /api
+		reverse_proxy localhost:3000
+	}
+
+	handle /public/* {
 		reverse_proxy localhost:3000
 	}
 
