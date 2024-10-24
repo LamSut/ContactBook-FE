@@ -1,0 +1,13 @@
+localhost {
+	root * dist
+	file_server
+
+	handle /api/* {
+		uri strip_prefix /api
+		reverse_proxy localhost:3000
+	}
+
+	handle {
+		try_files {path} index.html
+	}
+}
