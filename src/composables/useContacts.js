@@ -6,13 +6,19 @@ export default function useContacts() {
 
     const queryClient = useQueryClient();
 
-    function fetchContacts(page) {
+    function fetchContacts(page, sortOrder = "asc") {
         const { data: contactsPage, ...rest } = useQuery({
-            queryKey: ["contacts", page],
+            queryKey: ["contacts", page, sortOrder],
             queryFn: () => contactsService.fetchContacts(page.value),
         });
+
         const totalPages = computed(() => (contactsPage.value?.metadata?.lastPage ?? 1));
-        const contacts = computed(() => (contactsPage.value?.contacts ?? []));
+        const contacts = computed(() => (contactsPage.value?.contacts ?? []).sort((a, b) => {
+            const nameA = a.name.toLowerCase();
+            const nameB = b.name.toLowerCase();
+            return nameA.localeCompare(nameB);
+        }));
+
         return { totalPages, contacts, rest };
     }
 

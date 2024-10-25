@@ -44,12 +44,20 @@ const selectedContact = computed(() => {
   return filteredContacts.value[selectedIndex.value];
 });
 
+// Get contacts for a specific page and order them by name
+async function retrieveContacts() {
+  try {
+    selectedIndex.value = -1;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 // Handle delete all contacts event
 async function onDeleteContacts() {
   if (confirm('Bạn muốn xóa tất cả Liên hệ?')) {
     try {
-      await deleteAllContacts();
+      deleteAllContacts();
       selectedIndex.value = -1;
       changeCurrentPage(1);
     } catch (error) {
@@ -90,7 +98,7 @@ watch(searchText, () => (selectedIndex.value = -1));
         <MainPagination :total-pages="totalPages" :current-page="currentPage"
           @update:current-page="changeCurrentPage" />
         <div class="w-100"></div>
-        <button class="btn btn-sm btn-primary" @click="retrieveContacts(currentPage)">
+        <button class="btn btn-sm btn-primary" @click="retrieveContacts">
           <i class="fas fa-redo"></i> Làm mới
         </button>
         <button class="btn btn-sm btn-success" @click="goToAddContact">
