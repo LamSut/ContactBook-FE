@@ -33,9 +33,9 @@ const message = ref('');
 async function onUpdateContact(contact) {
     try {
         //bug 400, no handle 404 yet
-        updateContact(props.contactId, contact);
+        updateContact(contact);
         alert('Liên hệ được cập nhật thành công.');
-        router.push({ name: 'contactbook' });
+
     } catch (error) {
         console.log(error);
     }
@@ -44,7 +44,6 @@ async function onUpdateContact(contact) {
 async function onDeleteContact(id) {
     if (confirm('Bạn muốn xóa Liên hệ này?')) {
         try {
-            //con bug khi quay ve list
             deleteContact(id);
             alert('Liên hệ được xoá thành công.');
             router.push({ name: 'contactbook' });

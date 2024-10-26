@@ -8,6 +8,8 @@ const props = defineProps({
   contact: { type: Object, required: true },
 });
 
+const editContact = ref({ ...props.contact });
+
 let avatarFileInput = useTemplateRef('avatar-file-input');
 let avatarFile = ref(props.contact.avatar);
 
@@ -42,14 +44,8 @@ function previewAvatarFile(event) {
   reader.readAsDataURL(file);
 }
 
-function submitContact(values) {
-  let formData = new FormData();
-  for (let key in values) {
-    if (values[key] !== undefined) {
-      formData.append(key, values[key]);
-    }
-  }
-  $emit('submit:contact', formData);
+function submitContact() {
+  $emit('submit:contact', editContact.value);
 }
 
 function deleteContact() {
@@ -70,26 +66,26 @@ function deleteContact() {
     </div>
     <div class="mb-3">
       <label for="name" class="form-label">Tên</label>
-      <Field name="name" type="text" class="form-control" :value="contact.name" />
+      <Field name="name" type="text" class="form-control" v-model="editContact.name" />
       <ErrorMessage name="name" class="error-feedback" />
     </div>
     <div class="mb-3">
       <label for="email" class="form-label">E-mail</label>
-      <Field name="email" type="email" class="form-control" :value="contact.email" />
+      <Field name="email" type="email" class="form-control" v-model="editContact.email" />
       <ErrorMessage name="email" class="error-feedback" />
     </div>
     <div class="mb-3">
       <label for="address" class="form-label">Địa chỉ</label>
-      <Field name="address" type="text" class="form-control" :value="contact.address" />
-      <ErrorMessage name="address" class="error-feedback" />
+      <Field name="address" type="text" class="form-control" v-model="editContact.address" />
+      <ErrorMessage name=" address" class="error-feedback" />
     </div>
     <div class="mb-3">
       <label for="phone" class="form-label">Điện thoại</label>
-      <Field name="phone" type="tel" class="form-control" :value="contact.phone" />
+      <Field name="phone" type="tel" class="form-control" v-model="editContact.phone" />
       <ErrorMessage name="phone" class="error-feedback" />
     </div>
     <div class="mb-3 form-check">
-      <Field name="favorite" type="checkbox" class="form-check-input" :model-value="contact.favorite" :value="1"
+      <Field name="favorite" type="checkbox" class="form-check-input" v-model="editContact.favorite" :value="1"
         :unchecked-value="0" />
       <label for="favorite" class="form-check-label">
         <strong>Liên hệ yêu thích</strong>
@@ -98,7 +94,7 @@ function deleteContact() {
     <div class="mb-3">
       <button class="btn btn-primary"><i class="fas fa-save"></i>
         Lưu</button>
-      <button v-if="contact.id" type="button" class="ms-2 btn btn-danger" @click="deleteContact">
+      <button v-if="editContact.id" type="button" class="ms-2 btn btn-danger" @click="deleteContact">
         <i class="fas fa-trash"></i> Xóa
       </button>
     </div>

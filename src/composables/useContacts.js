@@ -8,7 +8,7 @@ export default function useContacts() {
 
     function fetchContacts(page, sortOrder = "asc") {
         const { data: contactsPage, ...rest } = useQuery({
-            queryKey: ["contacts", page, sortOrder],
+            queryKey: ["contacts", page],
             queryFn: () => contactsService.fetchContacts(page.value),
         });
 

@@ -41,7 +41,8 @@ function makeContactsService() {
     async function createContact(contact) {
         return efetch(baseUrl, {
             method: 'POST',
-            body: contact,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(contact),
         });
     }
     async function deleteAllContacts() {
@@ -49,10 +50,11 @@ function makeContactsService() {
             method: 'DELETE',
         });
     }
-    async function updateContact(id, contact) {
-        return efetch(`${baseUrl}/${id}`, {
+    async function updateContact(contact) {
+        return efetch(`${baseUrl}/${contact.id}`, {
             method: 'PUT',
-            body: contact,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(contact),
         });
     }
     async function deleteContact(id) {
