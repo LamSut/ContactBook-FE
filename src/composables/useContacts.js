@@ -1,12 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 import contactsService from "@/services/contacts.service";
 import { computed } from "vue";
+import { useRouter, useRoute } from 'vue-router';
 
 export default function useContacts() {
-
+    const router = useRouter();
+    const route = useRoute();
     const queryClient = useQueryClient();
 
-    function fetchContacts(page, sortOrder = "asc") {
+    function fetchContacts(page) {
         const { data: contactsPage, ...rest } = useQuery({
             queryKey: ["contacts", page],
             queryFn: () => contactsService.fetchContacts(page.value),
@@ -23,9 +25,22 @@ export default function useContacts() {
     }
 
     function fetchContact(id) {
-        const { data: contact } = useQuery({
+        const { data: contact, error } = useQuery({
             queryKey: ["contacts", id],
-            queryFn: () => contactsService.fetchContact(id)
+            queryFn: async () => {
+                try {
+                    return await contactsService.fetchContact(id);
+                } catch (error) {
+                    console.error("Error fetching contact:", error);
+                    router.push({
+                        name: 'notfound',
+                        params: { pathMatch: route.path.split('/').slice(1) },
+                        query: route.query,
+                        hash: route.hash,
+                    });
+                    return null;
+                }
+            }
         });
         return contact;
     }

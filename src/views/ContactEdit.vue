@@ -16,26 +16,10 @@ const { fetchContact, updateContact, deleteContact } = useContacts();
 const contact = fetchContact(props.contactId);
 const message = ref('');
 
-// async function getContact(id) {
-//     try {
-//         contact.value = await contactsService.fetchContact(id);
-//     } catch (error) {
-//         console.log(error);
-//         router.push({
-//             name: 'notfound',
-//             params: { pathMatch: route.path.split('/').slice(1) },
-//             query: route.query,
-//             hash: route.hash,
-//         });
-//     }
-// }
-
 async function onUpdateContact(contact) {
     try {
-        //bug 400, no handle 404 yet
         updateContact(contact);
         alert('Liên hệ được cập nhật thành công.');
-
     } catch (error) {
         console.log(error);
     }
