@@ -15,11 +15,15 @@ export default function useContacts() {
         });
 
         const totalPages = computed(() => (contactsPage.value?.metadata?.lastPage ?? 1));
-        const contacts = computed(() => (contactsPage.value?.contacts ?? []).sort((a, b) => {
-            const nameA = a.name.toLowerCase();
-            const nameB = b.name.toLowerCase();
-            return nameA.localeCompare(nameB);
-        }));
+        const contacts = computed(() => {
+            const contactsCopy = [...(contactsPage.value?.contacts ?? [])];
+            contactsCopy.sort((a, b) => {
+                const nameA = a.name.toLowerCase();
+                const nameB = b.name.toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+            return contactsCopy;
+        });
 
         return { totalPages, contacts, rest };
     }
